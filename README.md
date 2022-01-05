@@ -33,6 +33,9 @@ To install the hook (setWebHook), you just need to make a GET request for this r
 127.0.0.1 or localhost is not suitable. For local development, you can use the [ngrok](https://ngrok.com/) , and install a hook via a GET request to the address given to you:
 https://sample-address-from-ngrok.ngrok.io/hook
 
+
+## Usage
+
 To reply to messages from the bot, you need to create a command
 
 ```bash
