@@ -11,7 +11,7 @@ abstract class Command
     protected $telegram;
     protected $reception;
 
-    public function __construct(Telegram $telegram, BaseReception $reception)
+    public function __construct(Telegram $telegram = null, BaseReception $reception = null)
     {
         $this->telegram = $telegram;
         $this->reception = $reception;
