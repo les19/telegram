@@ -38,7 +38,7 @@ https://sample-address-from-ngrok.ngrok.io/hook
 If you want just send message by telegram_id you can do this:
 
 ```php
-// app/Telegram/Commands/CommandName.php
+// AnyClass.php
 
 use lex19\Telegram\Facades\Telegram;
 
