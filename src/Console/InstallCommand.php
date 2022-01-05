@@ -17,7 +17,7 @@ class InstallCommand extends Command
 
         $this->info('Publishing configuration...');
 
-        if (!$this->configExists('telegram.php')) {
+        if (! $this->configExists('telegram.php')) {
             $this->publishConfiguration();
             $this->info('Published configuration');
         } else {
@@ -30,7 +30,7 @@ class InstallCommand extends Command
         }
 
         $this->call("telegram:reception", [
-            "name" => "MainReception"
+            "name" => "MainReception",
         ]);
 
         $this->info('Installed telegram');
@@ -53,7 +53,7 @@ class InstallCommand extends Command
     {
         $params = [
             '--provider' => "lex19\Telegram\Providers\TelegramServiceProvider",
-            '--tag' => "config"
+            '--tag' => "config",
         ];
 
         if ($forcePublish === true) {

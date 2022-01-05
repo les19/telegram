@@ -2,21 +2,19 @@
 
 namespace lex19\Telegram;
 
-abstract class Keyboard  
+abstract class Keyboard
 {
+    protected $type = 'keyboard';
 
-  protected $type = 'keyboard';
+    final public function get(): array|string
+    {
+        return $this->keyboard();
+    }
 
-  final public function get(): array|string
-  {
-    return $this->keyboard();
-  }
+    final public function getType(): string
+    {
+        return $this->type;
+    }
 
-  final public function getType() : string
-  {
-    return $this->type;
-  }
-
-  abstract public function keyboard(): array|string;
-
+    abstract public function keyboard(): array|string;
 }

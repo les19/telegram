@@ -6,12 +6,10 @@ use lex19\Telegram\Traits\SetTelegramTrait;
 
 abstract class Command
 {
-
     use SetTelegramTrait;
 
     protected $telegram;
     protected $reception;
-
 
     public function __construct(Telegram $telegram, BaseReception $reception)
     {
@@ -27,6 +25,7 @@ abstract class Command
     public function setReception(BaseReception $reception)
     {
         $this->reception = $reception;
+
         return $this;
     }
 
