@@ -7,7 +7,7 @@
         "telegram bot",
         "telegram"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/les19/telegram",
     "license": "MIT",
     "authors": [
         {
