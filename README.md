@@ -29,7 +29,7 @@ Route::any('hook', function(){
 To install the hook (setWebHook), you just need to make a GET request for this route from the domain on which the bot will run. 
 
 ## Notice
-127.0.0.1 or localhost is not suitable. For local development, you can use the ngrok tool, and install a hook via a GET request to the address given to you:
+127.0.0.1 or localhost is not suitable. For local development, you can use the [ngrok](https://ngrok.com/) , and install a hook via a GET request to the address given to you:
 https://sample-address-from-ngrok.ngrok.io/hook
 
 
