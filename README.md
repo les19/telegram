@@ -33,8 +33,21 @@ To install the hook (setWebHook), you just need to make a GET request for this r
 127.0.0.1 or localhost is not suitable. For local development, you can use the [ngrok](https://ngrok.com/) , and install a hook via a GET request to the address given to you:
 https://sample-address-from-ngrok.ngrok.io/hook
 
-
 ## Usage
+
+If you want just send message by telegram_id you can do this:
+
+```php
+// app/Telegram/Commands/CommandName.php
+
+use lex19\Telegram\Facades\Telegram;
+
+Telegram::send([
+    "chat_id" => 123456,
+    "text" => "hello stranger!"
+]);
+
+```
 
 To reply to messages from the bot, you need to create a command
 
@@ -116,9 +129,7 @@ class MainReception extends BaseReception
 
 ```
 
-
 If you want the following message, regardless of its content, to run a specific command, you can define it inside the current command:
-
 
 ```php
 // app/Telegram/Commands/CommandName.php
@@ -127,7 +138,7 @@ namespace App\Telegram\Commands;
 
 use lex19\Telegram\Command;
 
-class CommandName extends Command  
+class CommandName extends Command
 {
 
   public function handle()
