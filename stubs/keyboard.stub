@@ -1,0 +1,31 @@
+<?php
+
+namespace DummyNamespace;
+
+use lex19\Telegram\Keyboard;
+
+class DummyClass extends Keyboard  
+{
+
+  protected $type = 'keyboard';
+
+  public function keyboard(): array|string
+  {
+    return [
+      "markup" => [1,2],
+      "keys" => [
+        [
+          "text" => "hello"
+        ],
+        [
+          "text" => "new"
+        ],
+        [
+          "text" => "world"
+        ]
+      ]
+    ];
+  }
+
+
+}

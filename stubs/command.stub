@@ -1,0 +1,15 @@
+<?php
+
+namespace DummyNamespace;
+
+use lex19\Telegram\Command;
+
+class DummyClass extends Command  
+{
+
+  public function handle()
+  {
+    return $this->telegram->send('hello');
+  }
+
+}

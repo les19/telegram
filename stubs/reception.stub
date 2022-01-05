@@ -1,0 +1,24 @@
+<?php
+
+namespace DummyNamespace;
+
+use lex19\Telegram\BaseReception;
+
+class DummyClass extends BaseReception
+{
+
+  protected $commands = [
+    // your commands here
+  ];
+
+  public function init()
+  {
+    // any code before input will parse
+  }
+
+  public function default()
+  {
+    $this->telegram->send('no comprente');
+  }
+
+}
