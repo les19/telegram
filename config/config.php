@@ -24,7 +24,7 @@ return [
   |--------------------------------------------------------------------------
   */
 
-  "reception" => App\Telegram\Receptions\Reception::class,
+  "reception" => App\Telegram\Receptions\MainReception::class,
 
   /*
   |--------------------------------------------------------------------------
