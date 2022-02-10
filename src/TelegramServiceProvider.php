@@ -17,7 +17,7 @@ class TelegramServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/telegram.php', 'telegram');
+        $this->mergeConfigFrom(__DIR__. '/../config/config.php', 'telegram');
     }
 
     /**
@@ -35,7 +35,7 @@ class TelegramServiceProvider extends ServiceProvider
                 InstallCommand::class,
             ]);
             $this->publishes([
-                __DIR__.'/../config/telegram.php' => config_path('telegram.php'),
+                __DIR__. '/../config/config.php' => config_path('telegram.php'),
               ], 'config');
         }
     }
