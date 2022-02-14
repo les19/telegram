@@ -8,7 +8,15 @@ abstract class Command
 {
     use SetTelegramTrait;
 
-    protected $telegram;
+    /**
+     * @var Telegram
+     */
+    protected Telegram $telegram;
+
+
+    /**
+     * @var BaseReception|null
+     */
     protected $reception;
 
     public function __construct(Telegram $telegram = null, BaseReception $reception = null)

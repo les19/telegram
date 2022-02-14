@@ -39,11 +39,11 @@ class Memory
     public function save()
     {
         Cache::put($this->key, [
-      "last" => $this->current,
-      "state" => $this->state,
-      "next" => $this->next,
-      "storage" => $this->storage,
-    ]);
+            "last" => $this->current,
+            "state" => $this->state,
+            "next" => $this->next,
+            "storage" => $this->storage,
+        ]);
     }
 
     public function getState()

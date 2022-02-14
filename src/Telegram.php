@@ -8,13 +8,43 @@ use Illuminate\Support\Facades\URL;
 
 class Telegram
 {
+    /**
+     * Current Http request
+     * @var Illuminate\Http\Request
+     */
     public $request;
+
     public $fromTelegram = false;
+
+    /**
+     * Text value of message or callback_query
+     * @var string
+     */
     public $text;
+
+    /**
+     * Data from callback_query 
+     * @var array
+     */
     public $data;
-    public $memory;
+
+    /**
+     * Telegram chat id
+     * @var int
+     */
     public $chat_id;
+
+    /**
+     * Url to send to telegram
+     * @var string
+     */
     public $url;
+
+    /**
+     * Cache wrapper
+     * @var lex19\Telegram\Memory
+     */
+    public $memory;
 
     protected $params = [];
     protected $method;
@@ -56,21 +86,21 @@ class Telegram
             $this->method = $method;
         }
 
-        if (! is_array($data) && is_string($data)) {
+        if (!is_array($data) && is_string($data)) {
             $data = [
-        "text" => $data,
-      ];
+                "text" => $data,
+            ];
         }
 
-        if (! isset($data['reply_markup']) && $this->keyboard) {
+        if (!isset($data['reply_markup']) && $this->keyboard) {
             $data['reply_markup'] = $this->keyboard;
         }
 
-        if (! isset($data['chat_id']) && $this->chat_id !== null) {
+        if (!isset($data['chat_id']) && $this->chat_id !== null) {
             $data['chat_id'] = $this->chat_id;
         }
 
-        if (! isset($data['parse_mode'])) {
+        if (!isset($data['parse_mode'])) {
             $data['parse_mode'] = $this->parse_mode;
         }
 
@@ -80,7 +110,7 @@ class Telegram
 
         $response = Http::withoutVerifying()->post($url, $this->params);
 
-        if (! $response['ok']) {
+        if (!$response['ok']) {
             info($response->body());
         }
 
@@ -90,6 +120,9 @@ class Telegram
     public function keyboard(Keyboard|string|array $markup, array $keys = null): self
     {
         $keyboard = null;
+
+        // 
+
         if (gettype($markup) === 'object') {
             $this->current_keyboard_type = $markup->getType();
 
@@ -109,15 +142,17 @@ class Telegram
             } elseif (is_string($data)) {
                 $keyboard = $data;
             }
-        } elseif (is_array($markup) && is_array($keys) && ! empty($keys) && ! empty($markup)) {
+        } elseif (is_array($markup) && is_array($keys) && !empty($keys) && !empty($markup)) {
             $keyboard = $this->makeKeyboard($markup, $keys);
         }
 
+        // 
+
         if ($keyboard !== null && is_array($keyboard)) {
             $this->keyboard = json_encode([
-        $this->current_keyboard_type => $keyboard,
-        "resize_keyboard" => true,
-      ]);
+                $this->current_keyboard_type => $keyboard,
+                "resize_keyboard" => true,
+            ]);
         } elseif ($keyboard !== null && is_string($keyboard)) {
             $this->keyboard = $keyboard;
         }
@@ -132,7 +167,7 @@ class Telegram
             for ($i = 0; $i < $row; $i++) {
                 if (count($keys) !== 0) {
                     $key = array_shift($keys);
-                    if ($this->current_keyboard_type === 'inline_keyboard' && ! isset($key['url']) && ! isset($key['callback_data'])) {
+                    if ($this->current_keyboard_type === 'inline_keyboard' && !isset($key['url']) && !isset($key['callback_data'])) {
                         $key['callback_data'] = $key['text'];
                     }
                     $data[$index][] = $key;
@@ -153,7 +188,7 @@ class Telegram
     public function hook(string|object $reception = null)
     {
         try {
-            if (! $this->fromTelegram) {
+            if (!$this->fromTelegram) {
                 $url = URL::current();
                 $this->deleteHook()->send();
 
@@ -162,8 +197,8 @@ class Telegram
                 if (is_string($reception)) {
                     $class = $reception ? $reception : config('telegram.reception');
                     $obj = app()->make($class, [
-            "telegram" => $this,
-          ]);
+                        "telegram" => $this,
+                    ]);
                 } elseif (is_object($reception)) {
                     $obj = $reception;
                 }
@@ -183,7 +218,7 @@ class Telegram
     public function setHook($url)
     {
         $this->method = 'setWebhook';
-        if (! str_contains($url, "https://") && str_contains($url, "http://")) {
+        if (!str_contains($url, "https://") && str_contains($url, "http://")) {
             $url = str_replace("http://", "https://", $url);
         }
         $this->params = ['url' => $url];
