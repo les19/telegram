@@ -56,6 +56,14 @@ class Memory
         return $this->storage;
     }
 
+    public function getFromStorage(string $key): mixed
+    {
+        if (isset($this->storage[$key])) {
+            return $this->storage[$key];
+        }
+        return null;
+    }
+
     public function getNext()
     {
         $next = $this->next;

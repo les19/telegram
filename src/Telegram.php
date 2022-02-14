@@ -29,6 +29,12 @@ class Telegram
     public $data;
 
     /**
+     * Previos message id
+     * @var int
+     */
+    public $last_message_id = null;
+
+    /**
      * Telegram chat id
      * @var int
      */
@@ -42,7 +48,7 @@ class Telegram
 
     /**
      * Cache wrapper
-     * @var lex19\Telegram\Memory
+     * @var Memory
      */
     public $memory;
 
@@ -58,6 +64,8 @@ class Telegram
     {
         $this->request = $request;
         $this->memory = new Memory($this);
+
+        $this->remember();
 
         if ($this->request !== null && $this->request->route() !== null && $this->request->method() == 'POST') {
             if (isset($this->request['callback_query'])) {
@@ -78,6 +86,11 @@ class Telegram
     public function __destruct()
     {
         $this->memory->save();
+    }
+
+    private function remember()
+    {
+        $this->last_message_id = $this->memory->getFromStorage('last_message_id');
     }
 
     public function send(array|string $data = [], string $method = "sendMessage"): \Illuminate\Http\Client\Response
@@ -108,13 +121,31 @@ class Telegram
         $this->params = array_merge($data, $this->params);
         $url = $this->url . $this->method;
 
-        $response = Http::withoutVerifying()->post($url, $this->params);
+        try {
+            $response = Http::withoutVerifying()->post($url, $this->params);
+        } catch (\Throwable $th) {
+            report($th);
+            return response();
+        }
 
         if (!$response['ok']) {
             info($response->body());
+        } else {
+            $this->memory->setStorage([
+                "last_message_id" => $response['result']['message_id']
+            ]);
         }
 
         return $response;
+    }
+
+    // Remove current reply keyboard
+    public function removeKeyboard(): self
+    {
+        $this->keyboard = json_encode([
+            "remove_keyboard" => true,
+        ]);
+        return $this;
     }
 
     public function keyboard(Keyboard|string|array $markup, array $keys = null): self
