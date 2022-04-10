@@ -22,6 +22,13 @@ abstract class Command
         $this->telegram->memory->setNext($data);
     }
 
+    public function setDialog(string $dialogClass): void
+    {
+        $dialog = new $dialogClass($this->telegram, $this->reception);
+        
+        $this->telegram->memory->setDialog($dialog);
+    }
+
     public function setReception(BaseReception $reception)
     {
         $this->reception = $reception;

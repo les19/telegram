@@ -115,6 +115,10 @@ abstract class BaseReception
             
             return $this->getRunCommand();
 
+        } elseif ($this->telegram->memory->hasDialog()) {
+            
+            return $this->telegram->memory->getDialog();
+        
         } elseif ($this->telegram->memory->hasNext()) {
             
             return $this->telegram->memory->getNext();
