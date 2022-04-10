@@ -8,7 +8,7 @@ return [
   |--------------------------------------------------------------------------
   */
 
-  "token" => env('TELEGRAM_TOKEd', null),
+  "token" => env('TELEGRAM_TOKEN', null),
 
   /*
   |--------------------------------------------------------------------------
@@ -36,6 +36,6 @@ return [
 
   "file_url" => "https://api.telegram.org/file/bot" . env('TELEGRAM_TOKEN', null),
 
-  "url" => "https://api.telegram.org/bot" . env('TELEGRAM_TOKEd', null),
+  "url" => "https://api.telegram.org/bot" . env('TELEGRAM_TOKEN', null),
 
 ];

@@ -27,20 +27,10 @@ class Telegram
     public function __construct(Request $request = null)
     {
         $this->request = $request;
-        $this->memory = new Memory($this);
 
-        if ($this->request !== null && $this->request->route() !== null && $this->request->method() == 'POST') {
-            if (isset($this->request['callback_query'])) {
-                $this->callback_query = true;
-                $this->data = $this->request['callback_query']['data'];
-                $this->text = mb_strtolower($request['callback_query']['message']['text']);
-                $this->chat_id = $request['callback_query']['message']['chat']['id'];
-            } else {
-                $this->text = mb_strtolower($request['message']['text']);
-                $this->chat_id = $request['message']['chat']['id'];
-            }
-            $this->fromTelegram = true;
-        }
+        $this->parseRequest();
+
+        $this->memory = new Memory($this);
 
         $this->url = $this->url . config('telegram.url') . '/';
     }
@@ -56,21 +46,21 @@ class Telegram
             $this->method = $method;
         }
 
-        if (! is_array($data) && is_string($data)) {
+        if (!is_array($data) && is_string($data)) {
             $data = [
-        "text" => $data,
-      ];
+                "text" => $data,
+            ];
         }
 
-        if (! isset($data['reply_markup']) && $this->keyboard) {
+        if (!isset($data['reply_markup']) && $this->keyboard) {
             $data['reply_markup'] = $this->keyboard;
         }
 
-        if (! isset($data['chat_id']) && $this->chat_id !== null) {
+        if (!isset($data['chat_id']) && $this->chat_id !== null) {
             $data['chat_id'] = $this->chat_id;
         }
 
-        if (! isset($data['parse_mode'])) {
+        if (!isset($data['parse_mode'])) {
             $data['parse_mode'] = $this->parse_mode;
         }
 
@@ -80,7 +70,7 @@ class Telegram
 
         $response = Http::withoutVerifying()->post($url, $this->params);
 
-        if (! $response['ok']) {
+        if (!$response['ok']) {
             info($response->body());
         }
 
@@ -109,15 +99,15 @@ class Telegram
             } elseif (is_string($data)) {
                 $keyboard = $data;
             }
-        } elseif (is_array($markup) && is_array($keys) && ! empty($keys) && ! empty($markup)) {
+        } elseif (is_array($markup) && is_array($keys) && !empty($keys) && !empty($markup)) {
             $keyboard = $this->makeKeyboard($markup, $keys);
         }
 
         if ($keyboard !== null && is_array($keyboard)) {
             $this->keyboard = json_encode([
-        $this->current_keyboard_type => $keyboard,
-        "resize_keyboard" => true,
-      ]);
+                $this->current_keyboard_type => $keyboard,
+                "resize_keyboard" => true,
+            ]);
         } elseif ($keyboard !== null && is_string($keyboard)) {
             $this->keyboard = $keyboard;
         }
@@ -132,7 +122,7 @@ class Telegram
             for ($i = 0; $i < $row; $i++) {
                 if (count($keys) !== 0) {
                     $key = array_shift($keys);
-                    if ($this->current_keyboard_type === 'inline_keyboard' && ! isset($key['url']) && ! isset($key['callback_data'])) {
+                    if ($this->current_keyboard_type === 'inline_keyboard' && !isset($key['url']) && !isset($key['callback_data'])) {
                         $key['callback_data'] = $key['text'];
                     }
                     $data[$index][] = $key;
@@ -153,7 +143,7 @@ class Telegram
     public function hook(string|object $reception = null)
     {
         try {
-            if (! $this->fromTelegram) {
+            if (!$this->fromTelegram) {
                 $url = URL::current();
                 $this->deleteHook()->send();
 
@@ -162,8 +152,8 @@ class Telegram
                 if (is_string($reception)) {
                     $class = $reception ? $reception : config('telegram.reception');
                     $obj = app()->make($class, [
-            "telegram" => $this,
-          ]);
+                        "telegram" => $this,
+                    ]);
                 } elseif (is_object($reception)) {
                     $obj = $reception;
                 }
@@ -183,7 +173,7 @@ class Telegram
     public function setHook($url)
     {
         $this->method = 'setWebhook';
-        if (! str_contains($url, "https://") && str_contains($url, "http://")) {
+        if (!str_contains($url, "https://") && str_contains($url, "http://")) {
             $url = str_replace("http://", "https://", $url);
         }
         $this->params = ['url' => $url];
@@ -208,5 +198,21 @@ class Telegram
         $this->chat_id = $id;
 
         return $this;
+    }
+
+    private function parseRequest()
+    {
+        if ($this->request !== null && $this->request->route() !== null && $this->request->method() == 'POST') {
+            if (isset($this->request['callback_query'])) {
+                $this->callback_query = true;
+                $this->data = $this->request['callback_query']['data'];
+                $this->text = mb_strtolower($this->request['callback_query']['message']['text']);
+                $this->chat_id = $this->request['callback_query']['message']['chat']['id'];
+            } else {
+                $this->text = mb_strtolower($this->request['message']['text']);
+                $this->chat_id = $this->request['message']['chat']['id'];
+            }
+            $this->fromTelegram = true;
+        }
     }
 }

@@ -28,6 +28,7 @@ abstract class BaseReception
         $this->init();
 
         $command = $this->find();
+        
         $this->fire($command);
     }
 
@@ -111,14 +112,21 @@ abstract class BaseReception
     private function find()
     {
         if ($this->runCommand !== null) {
+            
             return $this->getRunCommand();
+
         } elseif ($this->telegram->memory->hasNext()) {
+            
             return $this->telegram->memory->getNext();
+        
         } else {
+        
             $text = $this->telegram->text;
+        
             if (in_array($text, array_keys($this->commands))) {
                 return $this->commands[$text];
             }
+        
         }
 
         return [];
