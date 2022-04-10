@@ -52,7 +52,7 @@ class InstallCommand extends Command
     private function publishConfiguration($forcePublish = false)
     {
         $params = [
-            '--provider' => "lex19\Telegram\Providers\TelegramServiceProvider",
+            '--provider' => "lex19\Telegram\TelegramServiceProvider",
             '--tag' => "config",
         ];
 
